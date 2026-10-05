@@ -1,0 +1,119 @@
+def solve(zones, colors, neighbors):
+    assignment = {}
+
+    def valid(zone, color):
+        for n in neighbors[zone]:
+            if assignment.get(n) == color:
+                return False
+        return True
+
+    def backtrack():
+        if len(assignment) == len(zones):
+            return True
+
+        for zone in zones:
+            if zone not in assignment:
+                for color in colors:
+                    if valid(zone, color):
+                        assignment[zone] = color
+
+                        if backtrack():
+                            return True
+
+                        del assignment[zone]
+
+                return False
+
+        return False
+
+    if backtrack():
+        return assignment
+
+    return None
+
+
+def test_case(number, zones, colors, neighbors):
+    print(f"\n--- Test Case {number} ---")
+    print("Colors:", ", ".join(colors))
+
+    result = solve(zones, colors, neighbors)
+
+    if result:
+        print("Valid Assignment:")
+        for zone in zones:
+            print(f"{zone}={result[zone]}")
+    else:
+        print("No valid color assignment.")
+
+
+# Test Case 1
+test_case(
+    1,
+    ["A", "B", "C", "D", "E"],
+    ["Red", "Green", "Blue", "Yellow"],
+    {
+        "A": ["B", "C"],
+        "B": ["A", "C", "D"],
+        "C": ["A", "B", "D", "E"],
+        "D": ["B", "C", "E"],
+        "E": ["C", "D"]
+    }
+)
+
+
+# Test Case 2
+test_case(
+    2,
+    ["A", "B", "C", "D", "E"],
+    ["Red", "Green", "Blue"],
+    {
+        "A": ["B", "C"],
+        "B": ["A", "C", "D"],
+        "C": ["A", "B", "D", "E"],
+        "D": ["B", "C", "E"],
+        "E": ["C", "D"]
+    }
+)
+
+
+# Test Case 3
+test_case(
+    3,
+    ["A", "B", "C", "D", "E"],
+    ["Red", "Green"],
+    {
+        "A": ["B", "C"],
+        "B": ["A", "C", "D"],
+        "C": ["A", "B", "D", "E"],
+        "D": ["B", "C", "E"],
+        "E": ["C", "D"]
+    }
+)
+
+
+# Test Case 4
+test_case(
+    4,
+    ["A", "B", "C", "D"],
+    ["Red", "Green", "Blue"],
+    {
+        "A": ["B", "D"],
+        "B": ["A", "C"],
+        "C": ["B", "D"],
+        "D": ["A", "C"]
+    }
+)
+
+
+# Test Case 5
+test_case(
+    5,
+    ["A", "B", "C", "D"],
+    ["Red", "Green", "Blue"],
+    {
+        "A": ["B", "C", "D"],
+        "B": ["A", "C", "D"],
+        "C": ["A", "B", "D"],
+        "D": ["A", "B", "C"]
+    }
+)
