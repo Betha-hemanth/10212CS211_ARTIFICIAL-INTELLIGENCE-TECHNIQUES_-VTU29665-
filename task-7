@@ -1,0 +1,121 @@
+def monkey_banana(monkey, box, on_box, has_banana):
+    state = {
+        "monkey": monkey,
+        "box": box,
+        "on_box": on_box,
+        "has_banana": has_banana
+    }
+
+    goal_stack = ["HAS_BANANA"]
+    steps = []
+
+    while goal_stack:
+
+        goal = goal_stack.pop()
+
+        if goal == "HAS_BANANA":
+            if not state["has_banana"]:
+                goal_stack += [
+                    "GRASP_BANANA",
+                    "MONKEY_UNDER_BANANA",
+                    "ON_BOX",
+                    "BOX_UNDER_BANANA"
+                ]
+
+        elif goal == "BOX_UNDER_BANANA":
+            state["box"] = "ceiling"
+            steps.append("Move box under the banana")
+
+        elif goal == "ON_BOX":
+            state["monkey"] = state["box"]
+            state["on_box"] = True
+            steps.append("Monkey moves to the box and climbs onto it")
+
+        elif goal == "MONKEY_UNDER_BANANA":
+            state["monkey"] = "ceiling"
+            steps.append("Monkey moves under the banana")
+
+        elif goal == "GRASP_BANANA":
+            if state["on_box"] and state["monkey"] == "ceiling":
+                state["has_banana"] = True
+                steps.append("Monkey grasps the banana")
+
+    return state, steps
+
+
+def test_case(number, monkey, box, on_box, has_banana):
+
+    print(f"\n--- Test Case {number} ---")
+
+    print("Initial State:")
+    print(f"Monkey = {monkey}")
+    print(f"Box = {box}")
+    print(f"On Box = {on_box}")
+    print(f"Has Banana = {has_banana}")
+
+    state, steps = monkey_banana(
+        monkey, box, on_box, has_banana
+    )
+
+    print("\nActions:")
+
+    for step in steps:
+        print(step)
+
+    print("\nFinal State:")
+    print(f"Monkey = {state['monkey']}")
+    print(f"Box = {state['box']}")
+    print(f"On Box = {state['on_box']}")
+    print(f"Has Banana = {state['has_banana']}")
+
+    print("\nGoal Achieved:", state["has_banana"])
+
+
+# Test Case 1
+test_case(
+    1,
+    "door",
+    "window",
+    False,
+    False
+)
+
+
+# Test Case 2
+test_case(
+    2,
+    "window",
+    "door",
+    False,
+    False
+)
+
+
+# Test Case 3
+test_case(
+    3,
+    "corner",
+    "center",
+    False,
+    False
+)
+
+
+# Test Case 4
+test_case(
+    4,
+    "door",
+    "window",
+    True,
+    False
+)
+
+
+# Test Case 5
+test_case(
+    5,
+    "ceiling",
+    "ceiling",
+    True,
+    True
+)
