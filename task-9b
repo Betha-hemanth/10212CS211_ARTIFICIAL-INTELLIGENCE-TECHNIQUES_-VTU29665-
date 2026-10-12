@@ -1,0 +1,27 @@
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+docs = [
+    "Rice requires sufficient water for healthy growth.",
+    "Wheat grows well in cool weather and fertile soil.",
+    "Use organic compost to improve soil fertility.",
+    "Neem oil can help manage certain crop pests.",
+    "Drip irrigation helps conserve water."
+]
+
+vectorizer = TfidfVectorizer()
+matrix = vectorizer.fit_transform(docs)
+
+while True:
+    query = input("Farmer: ")
+
+    if query.lower() == "exit":
+        break
+
+    q = vectorizer.transform([query])
+    scores = cosine_similarity(q, matrix).flatten()
+
+    if scores.max() == 0:
+        print("Bot: Information not found.")
+    else:
+        print("Bot:", docs[scores.argmax()])
