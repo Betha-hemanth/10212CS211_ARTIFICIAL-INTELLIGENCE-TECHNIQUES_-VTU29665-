@@ -1,0 +1,20 @@
+# Hospital Information System
+
+doctors = {
+    "Dr_Ravi": "Cardiology",
+    "Dr_Priya": "Neurology",
+    "Dr_Kumar": "Cardiology",
+    "Dr_Anu": "Orthopedics"
+}
+
+specialization = input("Enter specialization: ")
+
+found = False
+
+for doctor, spec in doctors.items():
+    if spec.lower() == specialization.lower():
+        print(doctor)
+        found = True
+
+if not found:
+    print("No doctors found")
