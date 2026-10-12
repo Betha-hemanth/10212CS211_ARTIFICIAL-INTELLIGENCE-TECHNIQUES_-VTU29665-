@@ -1,0 +1,43 @@
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+# Course materials
+documents = [
+    "Python programming course covers variables, loops, functions and classes.",
+    "The assignment deadline for Python programming is October 20.",
+    "Java programming course covers OOP, inheritance and exception handling.",
+    "The DBMS course covers SQL, normalization and database management.",
+    "Learning resources include video lectures, notes and practice exercises."
+]
+
+# Convert documents into TF-IDF vectors
+vectorizer = TfidfVectorizer()
+tfidf_matrix = vectorizer.fit_transform(documents)
+
+def chatbot(query):
+    query_vector = vectorizer.transform([query])
+
+    similarity = cosine_similarity(
+        query_vector, tfidf_matrix
+    ).flatten()
+
+    index = similarity.argmax()
+
+    if similarity[index] == 0:
+        return "Sorry, I couldn't find relevant information."
+
+    return documents[index]
+
+# Chatbot interaction
+print("Online Learning Chatbot")
+print("Ask about courses, assignments, deadlines, or resources.")
+print("Type 'exit' to stop.")
+
+while True:
+    query = input("\nYou: ")
+
+    if query.lower() == "exit":
+        print("Chatbot: Goodbye! Happy Learning!")
+        break
+
+    print("Chatbot:", chatbot(query))
